@@ -12,7 +12,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
   kernel.run();
   kernel.addProcessIfNotExists(new logProcess(0, 0, ProcessPriority.Ticly));
-  kernel.addProcessIfNotExists(new Empire(0, 0, ProcessPriority.Ticly));
+  kernel.addProcessIfNotExists(new Empire(0, 0, ProcessPriority.Ticly).setup(Game.spawns['Spawn1'].room.name));
 
   finishTick();
 });
