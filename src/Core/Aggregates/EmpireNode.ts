@@ -1,13 +1,23 @@
-import { Roomlet } from "../Roomlet";
+import { CreepFactory } from "../../Infrastructure/Creep/creepFactory";
+import { RoomState } from "../Types/RoomState";
 
 export class EmpireNode {
-  public roomName: string;
+  public room: Room;
+  public roomName;
+  public currentState: RoomState = new RoomState;
+  public desiredState: RoomState = new RoomState;
 
-  constructor(public commandlet: Roomlet) {
-    this.roomName = commandlet.room.name;
+  constructor(room: Room) {
+    this.room = room;
+    this.roomName = this.room.name
   }
 
   public run() {
-    this.commandlet.run();
+    if (this.currentState.numberOfHarvarters < this.desiredState.numberOfHarvarters)
+      this.SpawnCreep('harvester', { role: 'harvester', room: this.room.name });
+  }
+
+  SpawnCreep(role: string, memory: CreepMemory) {
+    new CreepFactory(this.room).CreateCreep(role, memory);
   }
 }

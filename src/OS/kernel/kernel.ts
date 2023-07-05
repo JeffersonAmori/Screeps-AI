@@ -52,7 +52,6 @@ export let addProcess = function <T extends Process>(p: T, priority = ProcessPri
 };
 
 export let addProcessIfNotExists = function <T extends Process>(p: T, priority = ProcessPriority.LowPriority) {
-  debugger;
   let storedTable = Memory.processTable;
   for (let item of storedTable) {
     let [pid, parentPID, classPath, priority, ...remaining] = item;

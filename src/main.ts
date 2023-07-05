@@ -10,10 +10,9 @@ import MemoryController from "OS/processes/memory/memoryController";
 export const loop = ErrorMapper.wrapLoop(() => {
   initTick();
 
-  new Empire().run();
-
   kernel.run();
   kernel.addProcessIfNotExists(new logProcess(0, 0, ProcessPriority.Ticly));
+  kernel.addProcessIfNotExists(new Empire(0, 0, ProcessPriority.Ticly));
 
   finishTick();
 });
