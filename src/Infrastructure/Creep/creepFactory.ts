@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
-import { Consts } from './Consts';
+import { Consts } from './consts';
+
 
 export class BodyPartRequest {
   private _bodyPart: BodyPartConstant;

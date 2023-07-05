@@ -15,7 +15,6 @@ export class Empire extends Process {
   }
 
   run(): number {
-    debugger;
     _.forEach(Game.spawns, spawn => {
       var nodeProcess = kernel.addProcessIfNotExists(new EmpireNode(0, this.pid, ProcessPriority.Ticly))
         .setup(spawn.room.name, { numberOfHarvarters: 1 });
