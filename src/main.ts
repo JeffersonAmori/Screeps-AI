@@ -3,7 +3,7 @@ import { Empire } from "Core/Aggregates/Empire";
 import * as kernel from "OS/kernel/kernel";
 import { logProcess } from "OS/processes/logProcess";
 import { ProcessPriority } from "./OS/kernel/constants";
-import MemoryController from "./OS/processes/memory/MemoryController";
+import MemoryController from "OS/processes/memory/memoryController";
 
 declare global {
   /*
@@ -38,31 +38,22 @@ declare global {
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
-  console.log(`Current game tick is ${Game.time}`);
-  const EmpireInstance = new Empire();
-
   initTick();
-
-  EmpireInstance.rooms.forEach((room) => {
-    console.log(room.name);
-  });
 
   kernel.run();
   kernel.addProcessIfNotExists(new logProcess(0, 0, ProcessPriority.Ticly));
-
-  // Automatically delete memory of missing creeps
-  for (const name in Memory.creeps) {
-    if (!(name in Game.creeps)) {
-      delete Memory.creeps[name];
-    }
-  }
 
   finishTick();
 });
 
 function initTick() {
-    MemoryController.loadMemory();
+  MemoryController.loadMemory();
 }
 function finishTick() {
+  // Automatically delete memory of missing creeps
+  for (const name in Memory.creeps)
+    if (!(name in Game.creeps))
+      delete Memory.creeps[name];
+
   MemoryController.saveMemory();
 }
