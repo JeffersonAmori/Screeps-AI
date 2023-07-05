@@ -1,4 +1,9 @@
 import { ErrorMapper } from "utils/ErrorMapper";
+import { Empire } from "Core/Aggregates/Empire";
+import * as kernel from "OS/kernel/kernel";
+import { logProcess } from "OS/processes/logProcess";
+import { ProcessPriority } from "./OS/kernel/constants";
+import MemoryController from "./OS/processes/memory/MemoryController";
 
 declare global {
   /*
@@ -9,6 +14,7 @@ declare global {
     Types added in this `global` block are in an ambient, global context. This is needed because `main.ts` is a module file (uses import or export).
     Interfaces matching on name from @types/screeps will be merged. This is how you can extend the 'built-in' interfaces from @types/screeps.
   */
+
   // Memory extension samples
   interface Memory {
     uuid: number;
@@ -33,6 +39,16 @@ declare global {
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
   console.log(`Current game tick is ${Game.time}`);
+  const EmpireInstance = new Empire();
+
+  initTick();
+
+  EmpireInstance.rooms.forEach((room) => {
+    console.log(room.name);
+  });
+
+  kernel.run();
+  kernel.addProcessIfNotExists(new logProcess(0, 0, ProcessPriority.Ticly));
 
   // Automatically delete memory of missing creeps
   for (const name in Memory.creeps) {
@@ -40,4 +56,13 @@ export const loop = ErrorMapper.wrapLoop(() => {
       delete Memory.creeps[name];
     }
   }
+
+  finishTick();
 });
+
+function initTick() {
+    MemoryController.loadMemory();
+}
+function finishTick() {
+  MemoryController.saveMemory();
+}
