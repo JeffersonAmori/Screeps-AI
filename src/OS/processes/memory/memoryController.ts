@@ -8,7 +8,7 @@ let MemoryController = {
   loadMemory: function () {
     kernel.loadProcessTable();
     Memory.processMemory = Memory.processMemory || [];
-    Memory.kernelMemory = Memory.kernelMemory || { printProcess: false };
+    Memory.kernelMemory = Memory.kernelMemory || { printProcess: true };
   },
 }
 

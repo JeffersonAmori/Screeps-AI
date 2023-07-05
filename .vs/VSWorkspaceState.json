@@ -1,7 +1,16 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src",
+    "\\src\\Core",
+    "\\src\\Core\\CommandHandlers",
+    "\\src\\Core\\Commands",
+    "\\src\\Core\\Events",
+    "\\src\\Core\\Interfaces",
+    "\\src\\Infrastructure",
+    "\\src\\OS",
+    "\\src\\OS\\processes"
   ],
-  "SelectedNode": "\\C:\\Users\\Jefferson Rocha\\Source\\Repos\\Screeps-AI",
+  "SelectedNode": "\\src\\Core\\Aggregates\\NodePopulation.ts",
   "PreviewInSolutionExplorer": false
 }

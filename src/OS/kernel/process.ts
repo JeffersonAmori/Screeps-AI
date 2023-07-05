@@ -7,6 +7,7 @@ type DependencyInfo = [ConcreteProcess, ProcessSetupCallback];
 type ProcessSetupCallback = (p: Process) => void;
 
 export abstract class Process {
+
   public status: ProcessStatus;
   public abstract classPath(): string;
   public sleepInfo?: ProcessSleepByTime | ProcessSleepByProcess;

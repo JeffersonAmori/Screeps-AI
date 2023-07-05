@@ -1,7 +1,8 @@
-import { Consts } from "../../Infrastructure/Creep/consts";
 import { Process } from "../../OS/kernel/process";
-import { RoomState } from "../Types/RoomState";
-import { commands, messageBrokerInstance } from "../../Infrastructure/messageBroker";
+import { RoomState } from "../ValueObjects/RoomState";
+import { NodePopulation } from "./NodePopulation";
+import { ProcessPriority } from "../../OS/kernel/constants";
+import { RoomPopulationState } from "../ValueObjects/RoomPopulationState";
 
 export class EmpireNode extends Process {
 
@@ -11,29 +12,27 @@ export class EmpireNode extends Process {
 
   public setup(..._: any[]): Process {
     this.memory.roomName = _[0];
-    this.memory.desiredState = _[1];
     return this;
   }
 
   public run(): number {
-    const currentState = this.getCurrentState();
-    if (currentState.numberOfHarvarters < this.memory.desiredState.numberOfHarvarters)
-      messageBrokerInstance.publish("SpawnNewCreepCommand", { room: Game.rooms[this.memory.roomName], role: Consts.roleHarvester });
+    const currentState = this.memory.currentState || new RoomState();
+
+    debugger;
+    const newProcess = this.kernel.addProcessIfNotExists(new NodePopulation(0, this.pid, ProcessPriority.Ticly)
+      .setup(this.memory.roomName));
+
+    const nodePopulation = <NodePopulation>newProcess;
+    const desiredPopulationState = this.memory.desiredState || new RoomPopulationState();
+    desiredPopulationState.numberOfHarvarters = 2;
+    desiredPopulationState.numberOfCarriers = 2;
+    desiredPopulationState.numberOfMiners = 2;
+    desiredPopulationState.numberOfUpgraders = 2;
+    desiredPopulationState.numberOfRepairers = 2;
+    desiredPopulationState.numberOfBuilders = 2;
+
+    nodePopulation.setDesiredPopulationState(desiredPopulationState);
 
     return 0;
-  }
-
-  getCurrentState(): RoomState {
-    let currentState = new RoomState;
-    currentState.numberOfHarvarters = Game.rooms[this.memory.roomName]
-      .find(FIND_MY_CREEPS, {
-        filter: (creep) => creep.memory.role == Consts.roleHarvester
-      }).length;
-
-    return currentState;
-  }
-
-  HarvestEnergy() {
-
   }
 }
