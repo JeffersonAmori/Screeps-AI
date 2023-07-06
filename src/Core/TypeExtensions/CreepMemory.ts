@@ -7,8 +7,21 @@
   Interfaces matching on name from @types/screeps will be merged. This is how you can extend the 'built-in' interfaces from @types/screeps.
 */
 interface CreepMemory {
+  // Common to all creeps
   processId?: number;
   role: string;
   room: string;
-  otherResources?: [];
+  working?: boolean;
+  isRenewing?: boolean;
+  otherResources?: ResourceConstant[];
+  forceMoveToTargetContainer?: boolean;
+  // Builder
+  targetConstructionSiteId?: string;
+  // Carrier
+  targetEnergyDepositId?: string;
+  targetEnergySourceId?: string;
+  // Miner
+  targetContainerId?: string | undefined;
+  // repairer
+  structureToRepairId?: string;
 }

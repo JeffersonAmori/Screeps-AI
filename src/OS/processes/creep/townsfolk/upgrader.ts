@@ -1,9 +1,7 @@
-import { Consts } from "consts";
-import { profile } from "libs/Profiler-ts/Profiler";
+import { Consts } from "../../../../Infrastructure/Creep/consts";
 import { Process } from "../../../kernel/process";
 import { getEnergyProcess } from "../common/getEnergy";
 
-@profile
 export class UpgraderProcess extends Process {
     private _creep: Creep | null = null;
 

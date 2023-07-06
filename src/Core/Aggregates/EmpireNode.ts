@@ -11,13 +11,12 @@ export class EmpireNode extends Process {
   }
 
   public setup(..._: any[]): Process {
+    this.memory = this.memory || {};
     this.memory.roomName = _[0];
     return this;
   }
 
   public run(): number {
-    const currentState = this.memory.currentState || new RoomState();
-
     debugger;
     const newProcess = this.kernel.addProcessIfNotExists(new NodePopulation(0, this.pid, ProcessPriority.Ticly)
       .setup(this.memory.roomName));

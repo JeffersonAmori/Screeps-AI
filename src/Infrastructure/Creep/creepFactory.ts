@@ -133,7 +133,7 @@ export class CreepFactory {
       new BodyPartRequest(CLAIM, 1),
       new BodyPartRequest(MOVE, 3)])
   ];
-
+   
   private _room: Room;
 
   constructor(room: Room) {

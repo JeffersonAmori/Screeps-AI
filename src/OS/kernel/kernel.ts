@@ -2,7 +2,6 @@
 
 import { ProcessPriority } from "./constants";
 import { ProcessStatus } from "./process-status";
-// import { Process } from "../typings/process";
 import { ProcessSleepByProcess, ProcessSleepByTime } from "OS/kernel/process";
 import * as _ from 'lodash';
 import { Process } from "./process";
@@ -41,6 +40,7 @@ export let garbageCollection = function () {
 };
 
 export let addProcess = function <T extends Process>(p: T, priority = ProcessPriority.LowPriority) {
+  debugger;
   let pid = getFreePid();
   p.pid = pid;
   p.priority = priority;
@@ -52,6 +52,7 @@ export let addProcess = function <T extends Process>(p: T, priority = ProcessPri
 };
 
 export let addProcessIfNotExists = function <T extends Process>(p: T, priority = ProcessPriority.LowPriority) {
+  debugger;
   let storedTable = Memory.processTable;
   for (let item of storedTable) {
     let [pid, parentPID, classPath, priority, ...remaining] = item;
@@ -64,6 +65,7 @@ export let addProcessIfNotExists = function <T extends Process>(p: T, priority =
 };
 
 export let killProcess = function (pid: number) {
+  debugger;
   if (pid === 0) {
     console.log("ABORT! ABORT! Why are you trying to kill init?!");
     return -1;
@@ -115,6 +117,7 @@ export let getProcessById = function (pid: number): Process | null {
 };
 
 export let storeProcessTable = function () {
+  debugger;
   let aliveProcess = _.filter(_.values(processTable),
     (p: Process) => p.status !== ProcessStatus.DEAD);
 
@@ -123,12 +126,14 @@ export let storeProcessTable = function () {
 };
 
 export let getProcessMemory = function (pid: number) {
-  Memory.processMemory = Memory.processMemory || {};
-  Memory.processMemory[pid] = Memory.processMemory[pid] || {};
+  debugger;
+  Memory.processMemory ??= {};
+  Memory.processMemory[pid] ??= {};
   return Memory.processMemory[pid];
 };
 
 let runOneQueue = function (queue: Process[]) {
+  debugger;
   while (queue.length > 0) {
     let process = queue.pop();
     while (process) {
@@ -166,7 +171,8 @@ export let run = function () {
 };
 
 export let loadProcessTable = function () {
-  reboot();
+  debugger;
+  //reboot();
   Memory.processTable = Memory.processTable || [];
   let storedTable = Memory.processTable;
   for (let item of storedTable) {
@@ -202,7 +208,7 @@ export let loadProcessTable = function () {
       }
 
       if (Memory.kernelMemory.printProcess)
-        console.log(`PID: ${p.pid} | ${String(classPath).padEnd(30)}\t| Status: ${p.status}\t| Priority: ${p.priority}\t| Memory: ${JSON.stringify(memory)}`);
+        console.log(`PID: ${p.pid.toString().padEnd(4)} | ${String(classPath).padEnd(30)}\t| Status: ${p.status}\t| Priority: ${p.priority}\t| Memory: ${JSON.stringify(memory)}`);
 
     } catch (e: any) {
       console.log("Error when loading: " + classPath + ' | ' + e.message);
@@ -211,6 +217,7 @@ export let loadProcessTable = function () {
 };
 
 export let resetProcessTable = function () {
+  debugger;
   processTable = {};
 };
 

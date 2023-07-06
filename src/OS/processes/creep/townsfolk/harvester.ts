@@ -1,10 +1,7 @@
-import { profile } from "libs/Profiler-ts";
 import { Process } from "OS/kernel/process";
-import "libs/Traveler/Traveler";
-import { Consts } from "consts";
 import * as _ from 'lodash';
+import { Consts } from "../../../../Infrastructure/Creep/consts";
 
-@profile
 export class HarvesterProcess extends Process {
   private _creep: Creep | null = null;
 

@@ -12,14 +12,15 @@ export class NodePopulation extends Process {
   }
 
   public run(): number {
+    this.memory = this.memory || {};
     this._room = Game.rooms[this.memory.roomName];
     this.createCreeps();
 
     return 0;
   }
 
-  public setup(..._: any[]): Process {
-    this.memory= this.memory || {};
+  public override setup(..._: any[]): Process {
+    this.memory ??= {};
     this.memory.roomName = _[0];
     return this;
   }
@@ -55,6 +56,8 @@ export class NodePopulation extends Process {
 
   setDesiredPopulationState(state: RoomPopulationState) {
     this.memory.desiredState = state;
+    // TODO: Make this work on setup.
+    this.memory.roomName = 'sim';
   }
 
   getCurrentPopulationState(): RoomPopulationState {

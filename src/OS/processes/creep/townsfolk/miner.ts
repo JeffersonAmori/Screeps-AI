@@ -1,9 +1,6 @@
-import { Consts } from "consts";
-import { profile } from "libs/Profiler-ts/Profiler";
 import { Process } from "OS/kernel/process";
-import * as _ from 'lodash';
+import { Consts } from "../../../../Infrastructure/Creep/consts";
 
-@profile
 export class MinerProcess extends Process {
     private _creep: Creep | null = null;
 

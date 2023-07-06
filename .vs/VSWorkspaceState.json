@@ -1,16 +1,17 @@
 {
   "ExpandedNodes": [
     "",
+    "\\libs",
+    "\\libs\\Traveler",
     "\\src",
     "\\src\\Core",
-    "\\src\\Core\\CommandHandlers",
-    "\\src\\Core\\Commands",
-    "\\src\\Core\\Events",
-    "\\src\\Core\\Interfaces",
-    "\\src\\Infrastructure",
+    "\\src\\Core\\TypeExtensions",
     "\\src\\OS",
-    "\\src\\OS\\processes"
+    "\\src\\OS\\processes",
+    "\\src\\OS\\processes\\creep",
+    "\\src\\OS\\processes\\creep\\townsfolk",
+    "\\src\\OS\\processes\\global"
   ],
-  "SelectedNode": "\\src\\Core\\Aggregates\\NodePopulation.ts",
+  "SelectedNode": "\\src\\OS\\processes\\creep\\townsfolk\\carrier.ts",
   "PreviewInSolutionExplorer": false
 }
