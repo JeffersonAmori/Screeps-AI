@@ -89,49 +89,7 @@ export class CreepFactory {
     new BodyPartsReference(Consts.roleBuilder, [
       new BodyPartRequest(WORK, 10),
       new BodyPartRequest(CARRY, 8),
-      new BodyPartRequest(MOVE, 9)]),
-
-    // ADVENTURERS
-    new BodyPartsReference(Consts.rolePioneer, [
-      new BodyPartRequest(WORK, 8),
-      new BodyPartRequest(CARRY, 8),
-      new BodyPartRequest(MOVE, 8)]),
-
-    new BodyPartsReference(Consts.rolePillager, [
-      new BodyPartRequest(WORK, 8),
-      new BodyPartRequest(CARRY, 10),
-      new BodyPartRequest(MOVE, 18)]),
-
-    // MILITARY
-    new BodyPartsReference(Consts.roleSoldier, [
-      new BodyPartRequest(MOVE, 20),
-      new BodyPartRequest(TOUGH, 10),
-      new BodyPartRequest(ATTACK, 10)]),
-
-    new BodyPartsReference(Consts.roleFighterMelee, [
-      new BodyPartRequest(TOUGH, 10),
-      new BodyPartRequest(ATTACK, 10),
-      new BodyPartRequest(MOVE, 20)]),
-
-    new BodyPartsReference(Consts.roleFighterMeleeForAnotherRoom, [
-      new BodyPartRequest(TOUGH, 10),
-      new BodyPartRequest(ATTACK, 10),
-      new BodyPartRequest(MOVE, 20)]),
-
-    new BodyPartsReference(Consts.roleFighterRanged, [
-      new BodyPartRequest(TOUGH, 15),
-      new BodyPartRequest(RANGED_ATTACK, 10),
-      new BodyPartRequest(MOVE, 25)]),
-
-    new BodyPartsReference(Consts.rolefighterHealer, [
-      new BodyPartRequest(TOUGH, 10),
-      new BodyPartRequest(HEAL, 10),
-      new BodyPartRequest(MOVE, 20)]),
-
-    // DIPLOMACY
-    new BodyPartsReference(Consts.roleDiplomat, [
-      new BodyPartRequest(CLAIM, 1),
-      new BodyPartRequest(MOVE, 3)])
+      new BodyPartRequest(MOVE, 9)])
   ];
    
   private _room: Room;
@@ -163,24 +121,28 @@ export class CreepFactory {
       }
     }
 
-    if (sortBody) {
-      let finalBody: BodyPartConstant[] = [];
-      for (let i = 0; i < this.bodyPartsOrder.length;) {
-        let ret = bodyParts.indexOf(this.bodyPartsOrder[i]);
-        if (ret > -1) {
-          finalBody.push(this.bodyPartsOrder[i]);
-          delete bodyParts[ret];
-        }
-        else {
-          i++;
-        }
-      }
-
-      bodyParts = finalBody;
-    }
+    if (sortBody) 
+      bodyParts = this.sortBodyParts(bodyParts);
 
     return bodyParts;
   }
+
+    private sortBodyParts(bodyParts: BodyPartConstant[]) {
+        let finalBody: BodyPartConstant[] = [];
+        for (let i = 0; i < this.bodyPartsOrder.length;) {
+            let ret = bodyParts.indexOf(this.bodyPartsOrder[i]);
+            if (ret > -1) {
+                finalBody.push(this.bodyPartsOrder[i]);
+                delete bodyParts[ret];
+            }
+            else {
+                i++;
+            }
+        }
+
+        bodyParts = finalBody;
+        return bodyParts;
+    }
 
   public GetBodyPartsByRole(role: string): BodyPartConstant[] {
     let bodyPartsReference: BodyPartsReference | undefined = _.find(CreepFactory.BodyPartsReferenceByRole, x => x.role == role);
@@ -213,10 +175,14 @@ export class CreepFactory {
     if (!bodyPartsReference)
       throw new Error('CreepFactory.CreateCreep - role not found on BodyPartsReferenceByRole - role: ' + role);
 
-    const spawns: StructureSpawn[] | null = this._room.find(FIND_MY_STRUCTURES, { filter: s => s.structureType === STRUCTURE_SPAWN && !s.spawning });
+    const spawns: StructureSpawn[] | null = this._room.find(FIND_MY_STRUCTURES, { filter: s => s.structureType === STRUCTURE_SPAWN });
 
     if (!spawns || spawns.length === 0)
-      return ERR_BUSY;
+      return ERR_NOT_FOUND;
+
+    const selectedSpawn: StructureSpawn = spawns[0];
+    if (selectedSpawn.spawning)
+      return selectedSpawn.spawning.remainingTime;
 
     return spawns[0].spawnCreep(this.GetBodyPartsByRole(role), this._room.name + '-' + role + '-' + Math.random().toString(36).substr(2, 5), { memory: memory });
   }
