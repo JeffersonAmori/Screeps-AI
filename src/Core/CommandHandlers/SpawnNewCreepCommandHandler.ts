@@ -1,7 +1,7 @@
 import { CreepFactory } from "../../Infrastructure/Creep/creepFactory";
 import { SpawnNewCreepCommand } from "../Commands/SpawnNewCreepCommand";
 
-const waitTimersForRooms: { [key: string]: { nextTick: number } } = {}
+const waitTimersForRooms: { [key: string]: { nextTick: number } } = Memory.SpawnNewCreepCommandHandler.waitTimersForRooms ?? {}
 
 export class SpawnNewCreepCommandHandler {
   public static handle(spawnNewCreepCommand: SpawnNewCreepCommand) {
